@@ -12,10 +12,12 @@ RUN npm ci --ignore-scripts
 COPY nest-cli.json tsconfig.json tsconfig.build.json prisma7.config.ts ./
 COPY prisma ./prisma
 COPY src ./src
+COPY mocks ./mocks
 
 # The Prisma client is generated from the schema (src/generated is gitignored).
 RUN npx prisma generate
 RUN npm run build
+RUN npx tsc --ignoreConfig mocks/server.ts --outDir mocks --module nodenext --moduleResolution nodenext --target es2023 --skipLibCheck
 
 # ---- runtime --------------------------------------------------------------
 FROM node:24-alpine AS runtime
@@ -30,6 +32,7 @@ RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/prisma7.config.ts ./prisma7.config.ts
+COPY --from=build /app/mocks ./mocks
 
 EXPOSE 3000
 

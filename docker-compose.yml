@@ -31,10 +31,16 @@ services:
       DATABASE_URL: postgresql://carproject:carproject@postgres:5432/carproject?schema=public
       LOG_LEVEL: info
       CORS_ORIGIN: http://localhost:5173
+      SALES_API_URL: http://mock-sales:4001
+      SERVICE_API_URL: http://mock-service:4002
     ports:
       - '3000:3000'
     depends_on:
       postgres:
+        condition: service_healthy
+      mock-sales:
+        condition: service_healthy
+      mock-service:
         condition: service_healthy
     healthcheck:
       # Node 24 has global fetch; no curl needed in the image.
@@ -49,6 +55,57 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+
+  # One image, two processes: MOCK_SYSTEM selects the schema each one reads.
+  mock-sales:
+    build:
+      context: ./BE
+      target: runtime
+    command: ['node', 'mocks/server.js']
+    environment:
+      MOCK_SYSTEM: sales
+      PORT: 4001
+      DATABASE_URL: postgresql://carproject:carproject@postgres:5432/carproject
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  mock-service:
+    build:
+      context: ./BE
+      target: runtime
+    command: ['node', 'mocks/server.js']
+    environment:
+      MOCK_SYSTEM: service
+      PORT: 4002
+      DATABASE_URL: postgresql://carproject:carproject@postgres:5432/carproject
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4002/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
 volumes:
   postgres-data:
