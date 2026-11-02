@@ -18,7 +18,8 @@ backend rule. No new dependency, no custom CSS.
   the backend still returns 400 for direct callers.
 - One route, four components (not one file, not a state-machine hook).
 - antd only: `ConfigProvider` tokens for colour, component props for layout.
-  No CSS files, no `react-hook-form`, no client store.
+  `index.css` holds the design tokens and a base reset; no styled-components,
+  no `react-hook-form`, no client store.
 - File names follow the React docs: `PascalCase.tsx` for components,
   `useCamelCase.ts` for hooks. `FE/src/README.md` is updated to match.
 
@@ -37,7 +38,7 @@ FE/src/
 │   ├── utils/vin.ts                        VIN_PATTERN, isValidVin
 │   └── components/
 │       ├── VinSearchForm.tsx               Form + rules
-│       ├── DocumentList.tsx                List
+│       ├── DocumentList.tsx                Table, one row per document
 │       ├── SourceTag.tsx                   Tag
 │       └── DegradedBanner.tsx              Alert
 ```

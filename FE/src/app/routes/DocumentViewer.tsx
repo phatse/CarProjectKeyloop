@@ -10,12 +10,20 @@ export function DocumentViewer() {
   const { data, isFetching, isError } = useVehicleDocuments(vin)
 
   return (
-    <>
-      <Typography.Title level={2} style={{ marginBottom: 4 }}>
+    <div
+      style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-sheet)',
+        padding: 'var(--pad)',
+      }}
+    >
+      <Typography.Title level={3} style={{ fontSize: 'var(--fs-title)', marginTop: 0 }}>
         Vehicle documents
       </Typography.Title>
-      <Typography.Paragraph type="secondary" style={{ marginBottom: 32 }}>
-        Search by VIN to see every document from Sales and Service in one list.
+      <Typography.Paragraph type="secondary">
+        Every contract, invoice and service record held for one vehicle, from both dealership
+        systems.
       </Typography.Paragraph>
       <VinSearchForm onSearch={setVin} />
       <div style={{ marginTop: 32 }}>
@@ -33,9 +41,9 @@ export function DocumentViewer() {
         ) : null}
         {data && data.documents.length > 0 ? <DocumentList documents={data.documents} /> : null}
         {data && data.documents.length === 0 && !isError ? (
-          <Empty description={`No documents found for ${data.vin}`} style={{ marginTop: 48 }} />
+          <Empty description={`No documents on file for ${data.vin}`} style={{ marginTop: 48 }} />
         ) : null}
       </div>
-    </>
+    </div>
   )
 }

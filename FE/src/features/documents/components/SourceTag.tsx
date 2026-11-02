@@ -1,9 +1,9 @@
 import { Tag } from 'antd'
 import type { DocumentSource } from '@/features/documents/types/document'
 
-const sourceLabel: Record<DocumentSource, { label: string; color: string }> = {
-  SALES: { label: 'Sales', color: 'blue' },
-  SERVICE: { label: 'Service', color: 'green' },
+const sourceLabel: Record<DocumentSource, string> = {
+  SALES: 'Sales',
+  SERVICE: 'Service',
 }
 
 type SourceTagProps = {
@@ -11,7 +11,17 @@ type SourceTagProps = {
 }
 
 export function SourceTag({ source }: SourceTagProps) {
-  const { label, color } = sourceLabel[source]
-
-  return <Tag color={color}>{label}</Tag>
+  return (
+    <Tag
+      variant="outlined"
+      style={{
+        margin: 0,
+        color: 'var(--accent)',
+        borderColor: 'var(--accent)',
+        background: 'transparent',
+      }}
+    >
+      {sourceLabel[source]}
+    </Tag>
+  )
 }

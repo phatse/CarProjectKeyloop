@@ -5,7 +5,7 @@ const VIN = '1HGCM82633A004352'
 test('searching a VIN shows documents from both sources', async ({ page }) => {
   await page.goto('/')
 
-  await page.getByLabel('VIN').fill(VIN)
+  await page.getByRole('textbox').fill(VIN)
   await page.getByRole('button', { name: 'Search' }).click()
 
   await expect(page.getByText('Vehicle Purchase Agreement')).toBeVisible()
@@ -18,10 +18,10 @@ test('searching a VIN shows documents from both sources', async ({ page }) => {
 test('a VIN with no documents shows the empty state', async ({ page }) => {
   await page.goto('/')
 
-  await page.getByLabel('VIN').fill('3VWFE21C04M000001')
+  await page.getByRole('textbox').fill('3VWFE21C04M000001')
   await page.getByRole('button', { name: 'Search' }).click()
 
-  await expect(page.getByText('No documents found for 3VWFE21C04M000001')).toBeVisible()
+  await expect(page.getByText('No documents on file for 3VWFE21C04M000001')).toBeVisible()
 })
 
 test('a malformed VIN is blocked before any request', async ({ page }) => {
@@ -33,7 +33,7 @@ test('a malformed VIN is blocked before any request', async ({ page }) => {
   })
 
   await page.goto('/')
-  await page.getByLabel('VIN').fill('NOT-A-VIN')
+  await page.getByRole('textbox').fill('NOT-A-VIN')
   await page.getByRole('button', { name: 'Search' }).click()
 
   await expect(page.getByText(/17-character VIN/)).toBeVisible()

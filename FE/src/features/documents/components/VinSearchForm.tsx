@@ -17,38 +17,39 @@ export function VinSearchForm({ onSearch }: VinSearchFormProps) {
   }
 
   return (
-    <Form layout="vertical" onFinish={handleFinish} requiredMark={false} style={{ maxWidth: 480 }}>
-      <Form.Item
-        name="vin"
-        label="VIN"
-        rules={[
-          { required: true, whitespace: true, message: VIN_ERROR },
-          {
-            validator: (_, value: string | undefined) => {
-              const raw = value ?? ''
+    <Form onFinish={handleFinish} requiredMark={false}>
+      <Form.Item label="Vehicle identification number" style={{ marginBottom: 0 }}>
+        <div style={{ display: 'flex', gap: 8, maxWidth: 520 }}>
+          <Form.Item
+            name="vin"
+            noStyle
+            rules={[
+              { required: true, whitespace: true, message: VIN_ERROR },
+              {
+                validator: (_, value: string | undefined) => {
+                  const raw = value ?? ''
 
-              // Empty is the required rule's job; failing here too prints the
-              // same message twice.
-              if (raw.trim().length === 0) {
-                return Promise.resolve()
-              }
+                  // Empty is the required rule's job; failing here too prints the
+                  // same message twice.
+                  if (raw.trim().length === 0) {
+                    return Promise.resolve()
+                  }
 
-              return isValidVin(raw) ? Promise.resolve() : Promise.reject(new Error(VIN_ERROR))
-            },
-          },
-        ]}
-      >
-        <Input
-          placeholder="1HGCM82633A004352"
-          allowClear
-          size="large"
-          style={{ fontFamily: 'ui-monospace, monospace', letterSpacing: '0.04em' }}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" size="large">
-          Search
-        </Button>
+                  return isValidVin(raw) ? Promise.resolve() : Promise.reject(new Error(VIN_ERROR))
+                },
+              },
+            ]}
+          >
+            <Input
+              placeholder="1HGCM82633A004352"
+              allowClear
+              style={{ fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.04em' }}
+            />
+          </Form.Item>
+          <Button type="primary" htmlType="submit">
+            Search
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   )

@@ -11,7 +11,7 @@ describe('VinSearchForm', () => {
     const onSearch = vi.fn()
 
     render(<VinSearchForm onSearch={onSearch} />)
-    await user.type(screen.getByLabelText('VIN'), '  1hgcm82633a004352  ')
+    await user.type(screen.getByRole('textbox'), '  1hgcm82633a004352  ')
     await user.click(screen.getByRole('button', { name: 'Search' }))
 
     expect(onSearch).toHaveBeenCalledWith('1HGCM82633A004352')
@@ -22,7 +22,7 @@ describe('VinSearchForm', () => {
     const onSearch = vi.fn()
 
     render(<VinSearchForm onSearch={onSearch} />)
-    await user.type(screen.getByLabelText('VIN'), 'NOT-A-VIN')
+    await user.type(screen.getByRole('textbox'), 'NOT-A-VIN')
     await user.click(screen.getByRole('button', { name: 'Search' }))
 
     expect(onSearch).not.toHaveBeenCalled()
@@ -44,7 +44,7 @@ describe('VinSearchForm', () => {
     const user = userEvent.setup()
 
     render(<VinSearchForm onSearch={vi.fn()} />)
-    await user.type(screen.getByLabelText('VIN'), '1HGCM82633A00435')
+    await user.type(screen.getByRole('textbox'), '1HGCM82633A00435')
 
     expect(await screen.findAllByText(VIN_HINT)).toHaveLength(1)
   })
@@ -53,7 +53,7 @@ describe('VinSearchForm', () => {
     const user = userEvent.setup()
 
     render(<VinSearchForm onSearch={vi.fn()} />)
-    const input = screen.getByLabelText('VIN')
+    const input = screen.getByRole('textbox')
     await user.type(input, '1')
     await user.clear(input)
 
