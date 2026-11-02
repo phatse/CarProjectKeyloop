@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateEnv } from './env.js'
+import { validateEnv } from '../../../src/config/env.js'
 
 const validUrl = 'postgresql://carproject:carproject@localhost:5432/carproject?schema=public'
 
@@ -11,6 +11,9 @@ describe('validateEnv', () => {
     expect(env.NODE_ENV).toBe('development')
     expect(env.LOG_LEVEL).toBe('info')
     expect(env.CORS_ORIGIN).toBe('http://localhost:5173')
+    expect(env.SALES_API_URL).toBe('http://localhost:4001')
+    expect(env.SERVICE_API_URL).toBe('http://localhost:4002')
+    expect(env.UPSTREAM_TIMEOUT_MS).toBe(1500)
   })
 
   it('fails fast when DATABASE_URL is missing', () => {

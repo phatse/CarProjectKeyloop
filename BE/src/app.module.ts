@@ -4,6 +4,7 @@ import { LoggerModule } from 'nestjs-pino'
 import type { Env } from './config/env.js'
 import { validateEnv } from './config/env.js'
 import { buildLoggerOptions } from './config/logger.config.js'
+import { DocumentsModule } from './documents/documents.module.js'
 import { HealthModule } from './health/health.module.js'
 import { PrismaModule } from './prisma/prisma.module.js'
 
@@ -21,6 +22,7 @@ import { PrismaModule } from './prisma/prisma.module.js'
     }),
     PrismaModule,
     HealthModule,
+    DocumentsModule,
   ],
 })
 export class AppModule {}

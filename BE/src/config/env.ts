@@ -11,6 +11,11 @@ export const envSchema = z.object({
     }),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
+  // Upstream systems. Defaults match the local mock processes in Phase 2.
+  SALES_API_URL: z.url().default('http://localhost:4001'),
+  SERVICE_API_URL: z.url().default('http://localhost:4002'),
+  // Deadline per upstream call, in milliseconds (RFC-0001 assumption 3).
+  UPSTREAM_TIMEOUT_MS: z.coerce.number().int().positive().default(1500),
 })
 
 export type Env = z.infer<typeof envSchema>
