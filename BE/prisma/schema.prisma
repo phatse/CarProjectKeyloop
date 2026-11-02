@@ -13,7 +13,7 @@ datasource db {
 /// systems and are never copied here (ADR-0003).
 model SearchAudit {
   id               String   @id @default(uuid()) @db.Uuid
-  correlationId    String   @map("correlation_id") @db.Uuid
+  correlationId    String   @map("correlation_id") @db.VarChar(128)
   vin              String   @db.VarChar(17)
   salesStatus      String   @map("sales_status") @db.VarChar(20)
   serviceStatus    String   @map("service_status") @db.VarChar(20)

@@ -26,7 +26,6 @@ async function bootstrap(): Promise<void> {
     .setTitle('CarProject API')
     .setDescription('Keyloop technical assessment — Scenario D (Unified Document Viewer)')
     .setVersion('0.1.0')
-    .addServer('/api')
     .build()
 
   SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, swaggerConfig))
