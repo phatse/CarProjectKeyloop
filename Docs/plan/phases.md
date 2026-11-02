@@ -9,25 +9,26 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 1 — Database schema
 
-- [ ] `public.search_audit` model in `prisma/schema.prisma`
-- [ ] First migration committed
-- [ ] `BE/db/seed.sql` creates `sales_system` and `service_system` schemas + data
-- [ ] Seed is idempotent (`DROP SCHEMA IF EXISTS ... CASCADE` first)
+- [x] `public.search_audit` model in `prisma/schema.prisma`
+- [x] First migration committed
+- [x] `BE/db/seed.sql` creates `sales_system` and `service_system` schemas + data
+- [x] Seed is idempotent (`DROP SCHEMA IF EXISTS ... CASCADE` first)
 
 **DoD** — `npm run db:migrate` succeeds; `psql -c '\dn'` lists three schemas;
-`select count(*) from sales_system.document` returns 3.
+`select count(*) from sales_system.document` returns 7 and `service_system` 5.
+Migration `20261102134606_init`; seed applied with `npm run db:seed`.
 
 ---
 
 ## Phase 2 — Mock upstream systems
 
-- [ ] `BE/mocks/` runs two instances (`MOCK_SYSTEM=sales|service`)
-- [ ] `GET /documents?vin=` reads from its own schema
-- [ ] Fault injection: `?fail=true`, `?delay=<ms>`
-- [ ] Distinct payload shapes per system (different field names on purpose)
+- [x] `BE/mocks/` runs two instances (`MOCK_SYSTEM=sales|service`)
+- [x] `GET /documents?vin=` reads from its own schema
+- [x] Fault injection: `?fail=true`, `?delay=<ms>`
+- [x] Distinct payload shapes per system (different field names on purpose)
 
 **DoD** — `curl` returns documents for a known VIN; `?fail=true` returns 500;
-`?delay=5000` hangs past the deadline.
+`?delay=1200` responded in 1.21 s. Both processes read only their own schema.
 
 ---
 

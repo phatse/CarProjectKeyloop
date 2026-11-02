@@ -17,11 +17,11 @@ CarProject/
 | Area | State |
 | --- | --- |
 | `FE/` | ✅ Skeleton — Vite + React 19 + TS, libs installed, lint/test/build verified |
-| `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres, containerised (Dockerfile), health checks, Swagger, structured logs, tests verified |
+| `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres; Phase 1–2: audit table, seed, two mock upstreams |
 | `Docs/` | ✅ RFC-0001, 3 ADRs, phase plan, data model, API contract |
 | `AGENTS.md` | ✅ Agent rules (auto-loaded by OpenCode / Codex / Cursor) |
 | Root workspaces | ⬜ Not set up (each app installs independently) |
-| Domain code | ⬜ Not started |
+| Domain code | 🟨 Phase 1–2 done (DB + mocks). Next: Phase 3 (contract) |
 
 ## Quick start
 
@@ -70,6 +70,9 @@ npm run dev                # starts Postgres, then Nest with hot reload
 | Start API + DB in watch mode | `cd BE && npm run dev` |
 | Start UI | `cd FE && npm run dev` |
 | Run backend tests | `cd BE && npm test && npm run test:e2e` |
+| Load mock data | `cd BE && npm run db:seed` |
+| Start mock Sales system | `cd BE && npm run mock:sales` (`:4001`) |
+| Start mock Service system | `cd BE && npm run mock:service` (`:4002`) |
 | Reset the database | `cd BE && npm run db:reset` |
 
 ## Ports

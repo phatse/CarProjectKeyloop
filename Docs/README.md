@@ -60,4 +60,6 @@ contract disagree, the contract is the bug report.
 | --- | --- |
 | Scenario chosen | D — Unified Document Viewer |
 | Infrastructure | Done (FE skeleton, BE skeleton, Postgres + API in Docker) |
-| Domain code | Not started — begin at Phase 1 |
+| Phase 1 — database | Done: `search_audit` + 2 mock schemas, 12 seed rows |
+| Phase 2 — mock APIs | Done: `:4001` sales, `:4002` service, `?fail` / `?delay` |
+| Next | Phase 3 — contract and VIN validation |

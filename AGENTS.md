@@ -37,7 +37,12 @@ cd FE && npm run lint && npm run build && npm test
 
 # Database
 cd BE && npm run db:migrate     # create + apply a migration
+cd BE && npm run db:seed        # load mock upstream data (drops + recreates schemas)
 cd BE && npm run db:generate    # regenerate Prisma client
+
+# Mock upstream systems (two processes, two ports)
+cd BE && npm run mock:sales     # :4001, reads sales_system
+cd BE && npm run mock:service   # :4002, reads service_system
 ```
 
 ## Repository layout
