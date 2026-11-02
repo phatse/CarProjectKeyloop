@@ -1,0 +1,98 @@
+# Data model
+
+Three schemas in one PostgreSQL instance. The schema boundary is deliberate: it
+simulates three systems that do not share a database (ADR-0003).
+
+```
+carproject (database)
+├── public/           ← owned by this service
+│   └── search_audit
+├── sales_system/     ← owned by the mocked Sales system
+│   └── document
+└── service_system/   ← owned by the mocked Service system
+    └── document
+```
+
+## `public.search_audit`
+
+Owned by: this service. Written once per search.
+
+| Column | Type | Null | Notes |
+| --- | --- | --- | --- |
+| `id` | `uuid` | no | PK, `gen_random_uuid()` |
+| `correlation_id` | `uuid` | no | matches `x-correlation-id` |
+| `vin` | `varchar(17)` | no | normalised (upper-case) |
+| `sales_status` | `varchar(20)` | no | `OK` / `TIMEOUT` / `ERROR` / `INVALID_PAYLOAD` |
+| `service_status` | `varchar(20)` | no | same domain |
+| `sales_latency_ms` | `int` | no | |
+| `service_latency_ms` | `int` | no | |
+| `document_count` | `int` | no | documents returned to the client |
+| `degraded` | `boolean` | no | true when `meta.status = PARTIAL` |
+| `created_at` | `timestamptz` | no | default `now()` |
+
+Indexes:
+
+- `idx_search_audit_vin_created (vin, created_at desc)` — "what happened with
+  this vehicle?"
+- `idx_search_audit_correlation (correlation_id)` — join to logs
+
+Retention: not implemented (out of scope); noted in the design document.
+
+## `sales_system.document`
+
+Owned by: mocked Sales system. Shape deliberately different from Service.
+
+| Column | Type | Null | Notes |
+| --- | --- | --- | --- |
+| `id` | `text` | no | PK, e.g. `SL-2024-001` |
+| `vin` | `varchar(17)` | no | |
+| `doc_type` | `text` | no | `CONTRACT` / `INVOICE` / `WARRANTY` |
+| `title` | `text` | no | |
+| `signed_on` | `date` | no | |
+| `amount` | `numeric(12,2)` | yes | |
+| `currency` | `char(3)` | yes | |
+| `file_url` | `text` | yes | |
+
+Index: `(vin)`.
+
+## `service_system.document`
+
+Owned by: mocked Service system. Different column names on purpose.
+
+| Column | Type | Null | Notes |
+| --- | --- | --- | --- |
+| `id` | `text` | no | PK, e.g. `SVC-88213` |
+| `vin` | `varchar(17)` | no | |
+| `kind` | `text` | no | `SERVICE_ORDER` / `INSPECTION` / `REPAIR_ESTIMATE` |
+| `label` | `text` | no | |
+| `performed_on` | `date` | no | |
+| `total` | `numeric(12,2)` | yes | |
+| `link` | `text` | yes | |
+
+Index: `(vin)`.
+
+## Normalised `Document` (application model, not a table)
+
+| Field | From Sales | From Service |
+| --- | --- | --- |
+| `id` | `SALES:<id>` | `SERVICE:<id>` |
+| `source` | `SALES` | `SERVICE` |
+| `type` | `doc_type` | `kind` |
+| `title` | `title` | `label` |
+| `issuedAt` | `signed_on` | `performed_on` |
+| `amount` | `amount` | `total` |
+| `currency` | `currency` | `null` |
+| `url` | `file_url` | `link` |
+
+## Seed matrix
+
+| VIN | sales_system | service_system | Purpose |
+| --- | --- | --- | --- |
+| `1HGCM82633A004352` | 3 rows | 3 rows | happy path |
+| `2T1BURHE0JC123456` | 2 rows | 0 rows | single-source result |
+| `3VWFE21C04M000001` | 0 rows | 0 rows | valid VIN, no documents |
+| `4T1BF1FK5GU123789` | 1 row | 1 row | partial failure (call the service mock with `?delay=5000`) |
+| `5YJSA1E26HF000337` | 1 row | 1 row (same invoice) | cross-source duplicate |
+
+Cross-source duplicates are **not** merged: they are separate records in separate
+systems. Dedupe applies only within a source, by `(source, externalId)`.
