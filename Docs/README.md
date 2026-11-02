@@ -63,4 +63,5 @@ contract disagree, the contract is the bug report.
 | Phase 1 — database | Done: `search_audit` + 2 mock schemas, 12 seed rows |
 | Phase 2 — mock APIs | Done: `:4001` sales, `:4002` service, `?fail` / `?delay` |
 | Phases 3–5 — domain | Done: VIN schema, adapters, aggregation + audit |
-| Next | Phase 6 — HTTP endpoint |
+| Phases 6–7 — API | Done: endpoint, Swagger, 6 e2e cases |
+| Next | Phase 8 — frontend |

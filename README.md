@@ -17,11 +17,11 @@ CarProject/
 | Area | State |
 | --- | --- |
 | `FE/` | ✅ Skeleton — Vite + React 19 + TS, libs installed, lint/test/build verified |
-| `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres; phases 1–5: audit table, seed, mocks, adapters, aggregation |
+| `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres; phases 1–7: audit table, seed, mocks, adapters, service, endpoint, e2e |
 | `Docs/` | ✅ RFC-0001, 3 ADRs, phase plan, data model, API contract |
 | `AGENTS.md` | ✅ Agent rules (auto-loaded by OpenCode / Codex / Cursor) |
 | Root workspaces | ⬜ Not set up (each app installs independently) |
-| Domain code | 🟨 Phases 1–5 done (DB, mocks, adapters, service). Next: Phase 6 (endpoint) |
+| Domain code | 🟨 Phases 1–7 done (API complete; Docker mock wiring is phase 9). Next: Phase 8 (frontend) |
 
 ## Quick start
 

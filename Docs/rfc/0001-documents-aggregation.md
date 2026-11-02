@@ -138,10 +138,11 @@ distinct systems and both are shown.
 | unit | Service adapter maps payload; malformed → INVALID_PAYLOAD | `service.adapter.spec.ts` |
 | unit | Aggregator: both OK, one ERROR, one TIMEOUT, both fail, dedupe, empty, ordering | `documents.service.spec.ts` |
 | unit | Parallelism: total time ≈ max, not sum | `documents.service.spec.ts` |
-| e2e | happy path → 200 COMPLETE, 6 documents, both sources present | `test/documents.e2e-spec.ts` |
-| e2e | service mock down → 200 PARTIAL, sales documents only | `test/documents.e2e-spec.ts` |
-| e2e | malformed VIN → 400, no upstream call | `test/documents.e2e-spec.ts` |
-| e2e | audit row written for each search | `test/documents.e2e-spec.ts` |
+| e2e | happy path → 200 COMPLETE, 6 documents, both sources present | `test/e2e/documents.e2e-spec.ts` |
+| e2e | service mock down → 200 PARTIAL, sales documents only | `test/e2e/documents.e2e-spec.ts` |
+| e2e | malformed VIN → 400, no upstream call | `test/e2e/documents.e2e-spec.ts` |
+| e2e | both upstreams down → 502, audit row still written | `test/e2e/documents.e2e-spec.ts` |
+| e2e | audit row written for each search | `test/e2e/documents.e2e-spec.ts` |
 
 ## 10. Verification
 

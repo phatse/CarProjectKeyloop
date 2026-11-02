@@ -62,6 +62,7 @@ database — for example to run `npm run test:e2e` — run `npm run db:up` on it
 | --- | --- |
 | <http://localhost:3000/api/health/live> | Liveness — process only, no DB |
 | <http://localhost:3000/api/health> | Readiness — includes a database round-trip |
+| <http://localhost:3000/api/v1/vehicles/{vin}/documents> | Unified document list |
 | <http://localhost:3000/docs> | Swagger UI |
 | <http://localhost:3000/docs-json> | OpenAPI 3.0 document |
 
@@ -98,11 +99,13 @@ BE/
 ├── prisma7.config.ts        # Prisma 7 config: schema path, migrations, DATABASE_URL
 ├── src/
 │   ├── documents/           # the only feature module
+│   │   ├── documents.controller.ts
 │   │   ├── adapters/        # Sales/Service HTTP clients + DocumentSource port
 │   │   ├── dto/             # Zod schemas: VIN, Document, response
 │   │   ├── documents.service.ts
 │   │   ├── search-audit.repository.ts
 │   │   └── documents.module.ts
+│   ├── common/pipes/        # ZodValidationPipe
 │   ├── config/              # env schema (Zod) + logger factory
 │   ├── health/              # liveness + readiness endpoints
 │   ├── prisma/              # PrismaService (driver adapter) + module
@@ -124,6 +127,7 @@ file names, the name states what is inside, tests end in `.spec.ts`):
 | `*.adapter.ts` | class at a boundary | `sales.adapter.ts` |
 | `*.repository.ts` | persistence | `search-audit.repository.ts` |
 | `*.module.ts` | Nest module | `documents.module.ts` |
+| `*.pipe.ts` | Nest pipe | `zod-validation.pipe.ts` |
 | `*.schema.ts` | Zod schema + inferred type | `vin.schema.ts` |
 | `*.types.ts` | type-only declarations | `document-source.types.ts` |
 | `*.health.ts` | Terminus health indicator | `prisma.health.ts` |
@@ -144,13 +148,16 @@ All tests live under `test/`, mirroring the `src/` tree:
 ```
 test/
 ├── unit/
+│   ├── common/pipes/zod-validation.pipe.spec.ts
 │   ├── config/env.spec.ts
 │   └── documents/
 │       ├── documents.service.spec.ts
 │       ├── adapters/sales.adapter.spec.ts
 │       ├── adapters/service.adapter.spec.ts
 │       └── dto/vin.schema.spec.ts
-└── e2e/health.e2e-spec.ts
+└── e2e/
+    ├── documents.e2e-spec.ts
+    └── health.e2e-spec.ts
 ```
 
 | Level | Command | Location | Talks to |
@@ -181,6 +188,14 @@ const moduleRef = await Test.createTestingModule({
 
 Pure functions with no injected dependencies (Zod schemas, `validateEnv`) are
 called directly; a testing module would only add noise.
+
+The e2e suite starts both mock systems itself on `:4101`/`:4102` and stops them
+afterwards. It still needs PostgreSQL with seed data:
+
+```bash
+npm run db:up && npm run db:seed
+npm run test:e2e
+```
 
 ## Prisma 7 notes
 
@@ -213,6 +228,19 @@ import type { ConfigService } from '@nestjs/config'  // ❌ breaks DI
 ```
 
 Types that never appear in a constructor can stay `import type`.
+
+## Gotcha: Biome parameter decorators
+
+Biome 2 parses method/constructor parameter decorators only when the legacy
+TypeScript feature is enabled:
+
+```json
+"javascript": { "parser": { "unsafeParameterDecoratorsEnabled": true } }
+```
+
+Without it, `@Param('vin', pipe)` fails with *"Decorators are not valid here"*
+and every decorated parameter is reported as unused. The option is already set
+in `biome.json`; do not remove it while the app uses Nest parameter decorators.
 
 ## Environment variables
 

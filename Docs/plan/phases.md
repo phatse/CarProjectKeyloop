@@ -72,22 +72,25 @@ searches left a `search_audit` row.
 
 ## Phase 6 — HTTP endpoint
 
-- [ ] `GET /api/v1/vehicles/:vin/documents`
-- [ ] `ZodValidationPipe` on the param → 400 before any upstream call
-- [ ] 200 COMPLETE / 200 PARTIAL / 502 both failed
-- [ ] Swagger annotations
+- [x] `GET /api/v1/vehicles/:vin/documents`
+- [x] `ZodValidationPipe` on the param → 400 before any upstream call
+- [x] 200 COMPLETE / 200 PARTIAL / 502 both failed
+- [x] Swagger annotations
 
-**DoD** — `curl` shows the contract from `Docs/contracts/documents-api.md`;
-`/docs` renders the endpoint.
+**DoD** — `curl` returns the contract from `Docs/contracts/documents-api.md`;
+`/docs-json` lists `/api/v1/vehicles/{vin}/documents`; the 400 body reports
+`errors[0].path = "vin"`; the response header echoes `x-correlation-id`.
 
 ---
 
 ## Phase 7 — Integration tests
 
-- [ ] e2e: happy path, partial, invalid VIN, audit row
-- [ ] Runs against real Postgres + real mock services
+- [x] e2e: happy path, partial, invalid VIN, audit row
+- [x] Runs against real Postgres + real mock services
 
-**DoD** — `npm run test:e2e` green with containers up.
+**DoD** — `npm run test:e2e` green (8 cases: 6 documents + 2 health). The suite
+starts both mocks on OS-assigned ports, points the real adapters at them with
+provider overrides, then stops them.
 
 ---
 

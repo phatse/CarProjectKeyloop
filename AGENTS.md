@@ -99,6 +99,7 @@ the Angular style guide (a file name describes its contents; tests end in
 | `*.adapter.ts` | class at a boundary | `sales.adapter.ts` |
 | `*.repository.ts` | persistence | `search-audit.repository.ts` |
 | `*.module.ts` | Nest module | `documents.module.ts` |
+| `*.pipe.ts` | Nest pipe | `zod-validation.pipe.ts` |
 | `*.schema.ts` | Zod schema + inferred type | `vin.schema.ts` |
 | `*.types.ts` | type-only file, zero runtime code | `document-source.types.ts` |
 | `*.health.ts` | Terminus health indicator | `prisma.health.ts` |
