@@ -20,5 +20,5 @@ npm-debug.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
-superpowers
+.superpowers/
 .taste-skill/
