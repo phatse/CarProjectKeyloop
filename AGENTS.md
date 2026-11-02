@@ -77,6 +77,60 @@ Docs/                    RFCs, ADRs, plan, API contracts
 6. **Env is parsed once.** Never read `process.env` outside `config/env.ts`.
 7. **Business rules live in services, not controllers.** Controllers validate
    and delegate.
+8. **Naming follows the table in [Naming](#naming).** If a file or symbol does
+   not fit an existing row, add a row before inventing a suffix.
+
+## Naming
+
+Rules for backend code. The frontend follows React conventions: PascalCase
+component files (`App.tsx`), kebab-case for everything else.
+
+### Files
+
+`kebab-case`, with a dot-separated suffix that states what is inside. The
+authority is the Nest CLI schematics (`nest g service x` → `x.service.ts`) and
+the Angular style guide (a file name describes its contents; tests end in
+`.spec.ts`).
+
+| Suffix | Contains | Example |
+| --- | --- | --- |
+| `*.controller.ts` | HTTP controller | `documents.controller.ts` |
+| `*.service.ts` | provider with business logic | `documents.service.ts` |
+| `*.adapter.ts` | class at a boundary | `sales.adapter.ts` |
+| `*.repository.ts` | persistence | `search-audit.repository.ts` |
+| `*.module.ts` | Nest module | `documents.module.ts` |
+| `*.schema.ts` | Zod schema + inferred type | `vin.schema.ts` |
+| `*.types.ts` | type-only file, zero runtime code | `document-source.types.ts` |
+| `*.health.ts` | Terminus health indicator | `prisma.health.ts` |
+| `*.config.ts` | configuration factory | `logger.config.ts` |
+| `*.spec.ts` | unit test | `vin.schema.spec.ts` |
+| `*.e2e-spec.ts` | e2e test | `health.e2e-spec.ts` |
+| plain `*.ts` | module exporting functions, or `main.ts` | `env.ts`, `upstream-client.ts` |
+
+Never invent a suffix (`.port.ts`, `.helper.ts`, `.manager.ts`). If a file is
+100% types it is `.types.ts`; if it contains any runtime code it is not.
+Tool-mandated names (`vitest.config.ts`, `prisma7.config.ts`, `tsconfig.json`)
+keep the tool's name.
+
+### Folders
+
+Lowercase, no suffix, one business capability per folder. Inside a feature:
+`dto/` for contracts, `adapters/` for boundaries. Do not add a subfolder that
+holds one file unless it will grow. Tests mirror `src/` under `test/unit/`.
+
+### Symbols
+
+| Kind | Convention | Example |
+| --- | --- | --- |
+| Type | PascalCase, no `I` prefix, no `Type` suffix | `Document`, `SourceResult` |
+| Class | PascalCase; the file suffix is the class role | `SalesAdapter` in `sales.adapter.ts`, `PrismaHealthIndicator` in `prisma.health.ts` |
+| Zod schema | camelCase + `Schema`; the inferred type drops the suffix | `vinSchema` → `Vin` |
+| Function | camelCase, verb first for actions; test fixtures may be noun factories | `fetchUpstream`, `mergeDocuments` |
+| Boolean | `is` / `has` / `can` / `should` prefix | `isProduction` |
+| Constant | UPPER_SNAKE_CASE, module-level only | `VIN_PATTERN` |
+| Field | camelCase; `private readonly` when it never changes | `correlationId` |
+
+Abbreviations only for domain terms: `VIN`, `URL`, `ID`.
 
 ## Working agreement
 
@@ -87,6 +141,15 @@ Docs/                    RFCs, ADRs, plan, API contracts
 - Every phase ends with its Definition of Done satisfied and verified by a real
   command output — never "should work".
 - Keep changes inside the phase scope. Do not refactor unrelated code.
+- **Never commit or push unless the user explicitly asks.** Leave changes in the
+  working tree, report what changed, and wait for the user to review.
+- **Update the related docs in the same change.** If behaviour, a contract, a
+  table, a command, or a phase status changes, fix the doc that describes it
+  before reporting done.
+- **Tests live under `BE/test/`, mirroring `src/`**: unit tests in
+  `test/unit/<feature>/...`, e2e in `test/e2e/`. Unit specs use
+  `Test.createTestingModule` with every dependency mocked. See
+  `BE/README.md → Tests`.
 
 ## Definition of done (per phase)
 

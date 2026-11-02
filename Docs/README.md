@@ -62,4 +62,5 @@ contract disagree, the contract is the bug report.
 | Infrastructure | Done (FE skeleton, BE skeleton, Postgres + API in Docker) |
 | Phase 1 — database | Done: `search_audit` + 2 mock schemas, 12 seed rows |
 | Phase 2 — mock APIs | Done: `:4001` sales, `:4002` service, `?fail` / `?delay` |
-| Next | Phase 3 — contract and VIN validation |
+| Phases 3–5 — domain | Done: VIN schema, adapters, aggregation + audit |
+| Next | Phase 6 — HTTP endpoint |

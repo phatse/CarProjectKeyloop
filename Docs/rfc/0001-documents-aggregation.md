@@ -123,7 +123,9 @@ distinct systems and both are shown.
 1. VIN is 17 characters from `[A-HJ-NPR-Z0-9]` (ISO 3779); input is trimmed and
    upper-cased before validation.
 2. One vehicle has a bounded number of documents (< 100), so no pagination.
-3. Upstream latency p99 is under 1.5 s; the deadline is 1.5 s per source.
+3. Upstream latency p99 is under 1.5 s; the deadline is 1.5 s per source,
+   configurable through `UPSTREAM_TIMEOUT_MS` (default 1500) so tests can shrink
+   it without waiting for the real deadline.
 4. The mock systems' data shapes are fixed and versioned in this repository.
 5. A search with no results is a valid outcome, not an error.
 

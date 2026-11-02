@@ -34,35 +34,39 @@ Migration `20261102134606_init`; seed applied with `npm run db:seed`.
 
 ## Phase 3 — Contract and validation
 
-- [ ] `vin.schema.ts`, `document.schema.ts`, `response.schema.ts`
-- [ ] Types inferred from schemas (`z.infer`), no hand-written duplicates
-- [ ] Unit tests for VIN edge cases
+- [x] `vin.schema.ts`, `document.schema.ts`, `response.schema.ts`
+- [x] Types inferred from schemas (`z.infer`), no hand-written duplicates
+- [x] Unit tests for VIN edge cases
 
-**DoD** — `npm test` green; VIN tests cover valid, short, long, illegal chars,
-lowercase.
+**DoD** — `npm test` green; 7 VIN cases: valid, trim + lower-case, short,
+long, letters I/O/Q, symbols, empty.
 
 ---
 
 ## Phase 4 — Upstream adapters
 
-- [ ] `DocumentSource` port
-- [ ] `SalesAdapter`, `ServiceAdapter`
-- [ ] Per-call `AbortSignal.timeout(1500)`
-- [ ] Parse with Zod; malformed payload → `INVALID_PAYLOAD`, never throw
-- [ ] Unit tests with fixture payloads
+- [x] `DocumentSource` port
+- [x] `SalesAdapter`, `ServiceAdapter`
+- [x] Per-call `AbortSignal.timeout(1500)`, overridable with `UPSTREAM_TIMEOUT_MS`
+- [x] Parse with Zod; malformed payload → `INVALID_PAYLOAD`, never throw
+- [x] Unit tests with fixture payloads
 
-**DoD** — adapter specs green; a malformed fixture yields `INVALID_PAYLOAD`.
+**DoD** — adapter specs green; malformed fixture yields `INVALID_PAYLOAD`;
+non-2xx yields `ERROR`; expired deadline yields `TIMEOUT`.
 
 ---
 
 ## Phase 5 — Aggregation service
 
-- [ ] `Promise.allSettled` over both sources
-- [ ] Merge → dedupe by `(source, externalId)` → sort `issuedAt` desc
-- [ ] Persist `search_audit` (failure to persist must not fail the request)
-- [ ] Build `meta.status` and `meta.sources`
+- [x] `Promise.allSettled` over both sources
+- [x] Merge → dedupe by `(source, externalId)` → sort `issuedAt` desc
+- [x] Persist `search_audit` (failure to persist must not fail the request)
+- [x] Build `meta.status` and `meta.sources`
 
-**DoD** — 7 unit cases green, including "total latency ≈ max, not sum".
+**DoD** — 10 unit cases green, including "both calls run in parallel" (100 ms +
+100 ms completes under 180 ms). Verified against the real mocks: 6 documents
+`COMPLETE`, then with the Service mock stopped, 3 documents `PARTIAL`; both
+searches left a `search_audit` row.
 
 ---
 
@@ -102,7 +106,7 @@ killing the service mock shows the degraded banner.
 ## Phase 9 — Docker integration
 
 - [ ] `mock-sales`, `mock-service` services in `docker-compose.yml`
-- [ ] `SALES_API_URL`, `SERVICE_API_URL` in `config/env.ts`
+- [x] `SALES_API_URL`, `SERVICE_API_URL`, `UPSTREAM_TIMEOUT_MS` in `config/env.ts`
 - [ ] Seed runs automatically on first start
 
 **DoD** — `docker compose up -d --build` → four healthy containers; full flow
