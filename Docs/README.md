@@ -64,4 +64,6 @@ contract disagree, the contract is the bug report.
 | Phase 2 — mock APIs | Done: `:4001` sales, `:4002` service, `?fail` / `?delay` |
 | Phases 3–5 — domain | Done: VIN schema, adapters, aggregation + audit |
 | Phases 6–7 — API | Done: endpoint, Swagger, 6 e2e cases |
-| Next | Phase 8 — frontend |
+| Phase 8 — frontend | Done: VIN form, document list, source tags, degraded banner |
+| Phase 9 — Docker | Mocks in compose; seed still manual |
+| Next | Phase 9 remainder (auto-seed), then Phase 10 |

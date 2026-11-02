@@ -28,7 +28,7 @@ cd BE && npm run dev
 # Frontend
 cd FE && npm run dev
 
-# Everything in Docker (API + DB)
+# Everything in Docker (API + DB + both mock systems)
 docker compose up -d --build
 
 # Checks — run before finishing any task
@@ -147,10 +147,11 @@ Abbreviations only for domain terms: `VIN`, `URL`, `ID`.
 - **Update the related docs in the same change.** If behaviour, a contract, a
   table, a command, or a phase status changes, fix the doc that describes it
   before reporting done.
-- **Tests live under `BE/test/`, mirroring `src/`**: unit tests in
-  `test/unit/<feature>/...`, e2e in `test/e2e/`. Unit specs use
+- **Tests live under `BE/test/` and `FE/src/test/`, mirroring the source
+  tree**: unit tests in `test/unit/<feature>/...` (BE) or
+  `src/test/<feature>/...` (FE), e2e in `BE/test/e2e/`. Unit specs use
   `Test.createTestingModule` with every dependency mocked. See
-  `BE/README.md → Tests`.
+  `BE/README.md → Tests` and `FE/src/README.md`.
 
 ## Definition of done (per phase)
 

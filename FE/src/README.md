@@ -21,7 +21,11 @@ src/
 │       ├── types/          # types used only by this feature
 │       └── utils/          # pure helpers used only by this feature
 ├── lib/                    # third-party libs preconfigured (http, query client)
-└── test/                   # test setup, mocks, custom render helpers
+└── test/                   # mirrors src/: one folder per feature under test
+    ├── setup.ts
+    ├── features/documents/ # tests for src/features/documents
+    ├── mocks/
+    └── utils/
 ```
 
 ## Import direction (enforced by review)
@@ -63,8 +67,15 @@ file. Not before.
    query data into a client store.
 4. **Business rules do not live in components.** A component renders and calls a
    hook; the rule lives in `utils/` or in the API layer.
-5. **Tests sit next to the code** they test: `document-list.test.tsx` beside
-   `document-list.tsx`. Only cross-cutting helpers go in `test/`.
+5. **Tests live under `src/test/`, mirroring `src/`.** A test for
+   `features/documents/components/DocumentList.tsx` is
+   `test/features/documents/components/DocumentList.test.tsx`. Take the source
+   path and swap `src/` for `src/test/`. `test/setup.ts` and `test/utils/` hold
+   cross-cutting helpers only.
+6. **Style through antd, not custom CSS.** Layout and colour come from antd
+   component props and `ConfigProvider` tokens. No feature CSS files: a
+   hand-written stylesheet drifts from the theme and is invisible to antd's
+   design tokens.
 
 ## Where do I put …?
 
@@ -80,16 +91,17 @@ file. Not before.
 | Axios instance, QueryClient | `lib/` |
 | `formatDate`, `normalizeVin` | `features/<x>/utils/`; promote to `src/utils/` on the 2nd consumer |
 | A type used in 2+ features | `src/types/` — create it when the 2nd feature appears |
-| MSW handlers, custom `render()` | `test/` |
+| MSW handlers, custom `render()` | `test/mocks/`, `test/utils/` |
 
 ## Naming
 
 | Kind | Convention | Example |
 | --- | --- | --- |
-| Component file | `kebab-case.tsx` | `document-list.tsx` |
-| Component export | `PascalCase` | `export function DocumentList()` |
-| Hook | `use-*.ts` | `use-vehicle-documents.ts` |
-| Type | `PascalCase`, `type` only | `type DocumentSource = 'SALES' \| 'SERVICE'` |
-| Test | `*.test.tsx` | `document-list.test.tsx` |
+| Component file | PascalCase, matches the export | `DocumentList.tsx` |
+| Component export | function declaration, PascalCase | `export function DocumentList()` |
+| Hook file | `use` + camelCase | `useVehicleDocuments.ts` |
+| Non-component module | kebab-case | `get-documents.ts` |
+| Type | PascalCase, `type` only | `type DocumentSource = 'SALES' \| 'SERVICE'` |
+| Test | under `src/test/`, mirroring the source path | `src/test/features/documents/components/DocumentList.test.tsx` |
 
 Per project rules, use `type` — never `interface`.

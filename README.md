@@ -16,12 +16,12 @@ CarProject/
 
 | Area | State |
 | --- | --- |
-| `FE/` | ✅ Skeleton — Vite + React 19 + TS, libs installed, lint/test/build verified |
+| `FE/` | ✅ Document viewer — VIN search, aggregated list, source tags, degraded banner |
 | `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres; phases 1–7: audit table, seed, mocks, adapters, service, endpoint, e2e |
 | `Docs/` | ✅ RFC-0001, 3 ADRs, phase plan, data model, API contract |
 | `AGENTS.md` | ✅ Agent rules (auto-loaded by OpenCode / Codex / Cursor) |
 | Root workspaces | ⬜ Not set up (each app installs independently) |
-| Domain code | 🟨 Phases 1–7 done (API complete; Docker mock wiring is phase 9). Next: Phase 8 (frontend) |
+| Docker | 🟨 API + Postgres + both mocks. Auto-seed is the Phase 9 remainder |
 
 ## Quick start
 
@@ -64,7 +64,7 @@ npm run dev                # starts Postgres, then Nest with hot reload
 
 | What | Command |
 | --- | --- |
-| Start API + DB in Docker | `docker compose up -d --build` |
+| Start API + DB + mocks in Docker | `docker compose up -d --build` |
 | Follow API logs | `docker compose logs -f api` |
 | Stop everything | `docker compose down` |
 | Start API + DB in watch mode | `cd BE && npm run dev` |

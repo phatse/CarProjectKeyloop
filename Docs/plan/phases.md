@@ -96,24 +96,28 @@ provider overrides, then stops them.
 
 ## Phase 8 — Frontend
 
-- [ ] `features/documents/` — api, hooks, components
-- [ ] Route `app/routes/document-viewer.tsx`
-- [ ] States: idle, loading, empty, error, partial (banner)
-- [ ] Source badge per row
+- [x] `features/documents/` — api, hooks, components
+- [x] Route `app/routes/DocumentViewer.tsx`
+- [x] States: idle, loading, empty, error, partial (banner)
+- [x] Source badge per row
 
-**DoD** — searching a known VIN renders the consolidated list in the browser;
-killing the service mock shows the degraded banner.
+**DoD** — `npm run lint`, `tsc -b`, `npm test` (15) and `npm run build` pass.
+VIN validation mirrors the backend rule and blocks the request in the form.
+Browser verification of the live flow is part of Phase 9, which wires the
+mocks into Docker.
 
 ---
 
 ## Phase 9 — Docker integration
 
-- [ ] `mock-sales`, `mock-service` services in `docker-compose.yml`
+- [x] `mock-sales`, `mock-service` services in `docker-compose.yml`
 - [x] `SALES_API_URL`, `SERVICE_API_URL`, `UPSTREAM_TIMEOUT_MS` in `config/env.ts`
 - [ ] Seed runs automatically on first start
 
-**DoD** — `docker compose up -d --build` → four healthy containers; full flow
-works from the browser.
+**DoD** — `docker compose up -d --build` brings up four healthy containers and
+`GET /api/v1/vehicles/1HGCM82633A004352/documents` returns `COMPLETE` with 6
+documents. The frontend e2e suite (`FE/e2e`, Playwright) passes against it.
+Seed is still a manual `npm run db:seed`.
 
 ---
 
