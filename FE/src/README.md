@@ -8,11 +8,6 @@ The goal is one rule: **code that changes together lives together.**
 src/
 ├── app/                    # application shell
 │   └── routes/             # one file per route/page (composition only)
-├── assets/                 # static files imported by the bundler
-├── components/             # shared, feature-agnostic UI
-│   ├── ui/                 # primitives: buttons, inputs, empty states
-│   └── layouts/            # page shells: header, sidebar, content area
-├── config/                 # env parsing (Zod) and app-wide constants
 ├── features/               # feature modules — where most code lives
 │   └── documents/          # Scenario D: VIN search + aggregated documents
 │       ├── api/            # request functions + query/mutation hooks
@@ -24,14 +19,13 @@ src/
 └── test/                   # mirrors src/: one folder per feature under test
     ├── setup.ts
     ├── features/documents/ # tests for src/features/documents
-    ├── mocks/
-    └── utils/
+    └── e2e/                # Playwright browser tests
 ```
 
 ## Import direction (enforced by review)
 
 ```
-shared (components, lib, config, test)
+shared (lib, test)
         ↑
     features
         ↑
@@ -47,9 +41,10 @@ something from another feature, compose them in `app/` instead.
 
 ## Shared folders are created on demand
 
-There is **no** `src/hooks/`, `src/utils/`, or `src/types/` yet. That is
-deliberate: with a single feature, anything placed there has exactly one
-consumer, and shared code with one consumer is just code in the wrong folder.
+There is **no** `src/components/`, `src/assets/`, `src/config/`, `src/hooks/`,
+`src/utils/`, or `src/types/` yet. That is deliberate: with a single feature,
+anything placed there has exactly one consumer, and shared code with one
+consumer is just code in the wrong folder.
 
 When a second feature needs the same helper, create the folder and move the
 file. Not before.
@@ -70,8 +65,10 @@ file. Not before.
 5. **Tests live under `src/test/`, mirroring `src/`.** A test for
    `features/documents/components/DocumentList.tsx` is
    `test/features/documents/components/DocumentList.test.tsx`. Take the source
-   path and swap `src/` for `src/test/`. `test/setup.ts` and `test/utils/` hold
-   cross-cutting helpers only.
+   path and swap `src/` for `src/test/`. `test/setup.ts` holds the
+   cross-cutting setup. Browser tests are the exception: they live in
+   `src/test/e2e/` and run under Playwright, because they drive the whole app
+   rather than one source file.
 6. **Style through antd, not custom CSS.** Layout and colour come from antd
    component props and `ConfigProvider` tokens. No feature CSS files: a
    hand-written stylesheet drifts from the theme and is invisible to antd's
@@ -83,15 +80,15 @@ file. Not before.
 | --- | --- |
 | A page/route | `app/routes/` |
 | Router config, providers | `app/` |
-| A button, input, empty state | `components/ui/` |
-| A header/sidebar used by every page | `components/layouts/` |
+| A button, input, empty state | `features/<x>/components/`; create `components/ui/` on the 2nd consumer |
+| A header/sidebar used by every page | `app/`; create `components/layouts/` when a second route needs it |
 | Fetch/mutate for one feature | `features/<x>/api/` |
 | A component used by one feature only | `features/<x>/components/` |
-| Env var parsing | `config/` |
+| Env var parsing | create `src/config/` when the first env var is read |
 | Axios instance, QueryClient | `lib/` |
 | `formatDate`, `normalizeVin` | `features/<x>/utils/`; promote to `src/utils/` on the 2nd consumer |
 | A type used in 2+ features | `src/types/` — create it when the 2nd feature appears |
-| MSW handlers, custom `render()` | `test/mocks/`, `test/utils/` |
+| MSW handlers, custom `render()` | create `test/mocks/`, `test/utils/` when the first test needs one |
 
 ## Naming
 

@@ -51,8 +51,8 @@ cd BE && npm run mock:service   # :4002, reads service_system
 FE/src/
 ├── app/routes/          route composition only
 ├── features/<name>/     api, components, hooks, types, utils
-├── components/ui|layouts
-├── lib/ config/ test/
+├── lib/                 configured instances (http client, query client)
+└── test/                unit tests mirroring src/, e2e/ for Playwright
 BE/src/
 ├── documents/           feature module (controller, service, adapters, dto)
 ├── health/ prisma/ config/ common/
@@ -66,7 +66,8 @@ Docs/                    RFCs, ADRs, plan, API contracts
 1. **Feature-first.** One folder per business capability. Never group by
    technical layer (`controllers/`, `services/`).
 2. **No cross-feature imports.** `features/a` never imports `features/b`.
-   Share via `components/` or compose in `app/`.
+   Compose them in `app/`, or promote the shared part to `components/` once a
+   second feature needs it.
 3. **No barrel files.** Import the concrete file, never a folder `index.ts`.
    Exception: `lib/` may expose a single configured instance.
 4. **`type`, never `interface`.** Project rule.
@@ -149,7 +150,8 @@ Abbreviations only for domain terms: `VIN`, `URL`, `ID`.
   before reporting done.
 - **Tests live under `BE/test/` and `FE/src/test/`, mirroring the source
   tree**: unit tests in `test/unit/<feature>/...` (BE) or
-  `src/test/<feature>/...` (FE), e2e in `BE/test/e2e/`. Unit specs use
+  `src/test/<feature>/...` (FE), e2e in `BE/test/e2e/` (BE) and
+  `src/test/e2e/` (FE). Unit specs use
   `Test.createTestingModule` with every dependency mocked. See
   `BE/README.md → Tests` and `FE/src/README.md`.
 

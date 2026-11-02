@@ -116,7 +116,7 @@ mocks into Docker.
 
 **DoD** — `docker compose up -d --build` brings up four healthy containers and
 `GET /api/v1/vehicles/1HGCM82633A004352/documents` returns `COMPLETE` with 6
-documents. The frontend e2e suite (`FE/e2e`, Playwright) passes against it.
+documents. The frontend e2e suite (`FE/src/test/e2e`, Playwright) passes against it.
 Seed is still a manual `npm run db:seed`.
 
 ---

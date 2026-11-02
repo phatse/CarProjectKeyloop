@@ -65,16 +65,14 @@ import { httpClient } from '@/lib/http'
 ```
 src/
 ├── app/          # shell: router, providers, routes
-├── assets/       # static assets imported by the bundle
-├── components/   # shared UI (ui/ primitives, layouts/ shells)
-├── config/       # env parsing (Zod) + app-wide constants
 ├── features/     # feature modules — most code lives here
 ├── lib/          # preconfigured third-party (http client, query client)
-└── test/         # test setup, mocks, custom render helpers
+└── test/         # test setup, feature tests, e2e/ (Playwright)
 ```
 
-`src/hooks/`, `src/utils/`, `src/types/` are **not created yet** — they appear
-only when a second feature needs the same code.
+`src/components/`, `src/assets/`, `src/config/`, `src/hooks/`, `src/utils/`
+and `src/types/` are **not created yet** — they appear only when a second
+feature needs the same code.
 
 **Full rules — import direction, "where do I put X", naming — are in
 [`src/README.md`](./src/README.md).** Read it before adding a new folder.

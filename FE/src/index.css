@@ -3,13 +3,11 @@
   --surface: #ffffff;
   --border: #e8eaec;
   --text: #131416;
-  --muted: #5d5f60;
   --accent: #1b6c80;
   --radius-sheet: 16px;
   --sheet-inset: 8px;
   --pad: 24px;
   --fs-title: 22px;
-  --fs-body: 14px;
 
   font-family: "IBM Plex Sans", system-ui, sans-serif;
   line-height: 1.5;

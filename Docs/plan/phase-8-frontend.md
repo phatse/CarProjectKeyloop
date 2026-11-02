@@ -43,8 +43,7 @@ FE/src/
 │       └── DegradedBanner.tsx              Alert
 ```
 
-Empty placeholder folders (`api/`, `components/`, ...) already exist; the
-`.gitkeep` files are removed as real files land.
+Folders land with the code that uses them; no empty scaffold folders are kept.
 
 ## Naming
 
