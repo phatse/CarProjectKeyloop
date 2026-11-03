@@ -125,9 +125,9 @@ sequenceDiagram
       A2-->>S: SourceResult
     end
     S->>S: normalise both shapes, dedupe by (source, externalId), sort by issuedAt desc
-    S-)DB: audit row · best effort
+    S->>DB: insert search_audit (failure logged, response continues)
     alt both sources failed
-      S-->>C: BadGateway
+      S-->>C: throws BadGatewayException
       C-->>FE: 502 + per-source status
     else at least one source OK
       S-->>C: DocumentsResponse
