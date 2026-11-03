@@ -54,7 +54,7 @@ Folders land with the code that uses them; no empty scaffold folders are kept.
 | Hook file | `use` + camelCase | `useVehicleDocuments.ts` |
 | Non-component module | kebab-case | `get-documents.ts` |
 | Type | PascalCase, `type` only | `Document` |
-| Test | beside the file, `.test.tsx` | `VinSearchForm.test.tsx` |
+| Test | mirrors the source under `src/test/`, `.test.tsx` | `src/test/features/documents/components/VinSearchForm.test.tsx` |
 | Boolean | `is`/`has` prefix | `isValidVin` |
 | Event handler prop | `on` + noun | `onSearch` |
 | Event handler | `handle` + noun | `handleFinish` |

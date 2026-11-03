@@ -8,8 +8,8 @@ Monorepo for the Keyloop coding challenge (Scenario D — Unified Document Viewe
 CarProject/
 ├── FE/      React 19 + TypeScript SPA (Vite)
 ├── BE/      NestJS 12 + Prisma 7 + PostgreSQL 18
-├── Docs/    System design document, ADRs, diagrams
-└── docker-compose.yml   PostgreSQL + API (containerised)
+├── Docs/    System design, RFC, ADRs, API contract, phase plan, data model
+└── docker-compose.yml   PostgreSQL + API + both mock systems
 ```
 
 ## Status
@@ -17,8 +17,8 @@ CarProject/
 | Area | State |
 | --- | --- |
 | `FE/` | ✅ Document viewer — VIN search, aggregated list, source tags, degraded banner |
-| `BE/` | ✅ Skeleton — NestJS 12 + Prisma 7 + Postgres; phases 1–7: audit table, seed, mocks, adapters, service, endpoint, e2e |
-| `Docs/` | ✅ RFC-0001, 3 ADRs, phase plan, data model, API contract |
+| `BE/` | ✅ NestJS 12 + Prisma 7 + Postgres; phases 1–9: audit table, seed, both mock systems, adapters, aggregation, endpoint, health checks, e2e |
+| `Docs/` | ✅ RFC-0001, 3 ADRs, system design, phase plan, data model, API contract |
 | `AGENTS.md` | ✅ Agent rules (auto-loaded by OpenCode / Codex / Cursor) |
 | Root workspaces | ⬜ Not set up (each app installs independently) |
 | Docker | ✅ API, Postgres and both mocks; mock data loaded with the seed command in Quick start |
@@ -76,7 +76,7 @@ in development.
 cd BE
 cp .env.example .env
 npm install
-npm run dev                # starts Postgres, then Nest with hot reload
+npm run dev                # starts Postgres + both mocks, then Nest with hot reload
 ```
 
 ## Commands (the only ones you need)
@@ -86,13 +86,18 @@ npm run dev                # starts Postgres, then Nest with hot reload
 | Start API + DB + mocks in Docker | `docker compose up -d --build` |
 | Follow API logs | `docker compose logs -f api` |
 | Stop everything | `docker compose down` |
-| Start API + DB in watch mode | `cd BE && npm run dev` |
+| Start API + DB + mocks in watch mode | `cd BE && npm run dev` |
 | Start UI | `cd FE && npm run dev` |
-| Run backend tests | `cd BE && npm test && npm run test:e2e` |
+| Run backend tests | `cd BE && npm test && npm run test:e2e` (Postgres must be up) |
+| Run frontend unit tests | `cd FE && npm test` |
+| Run browser tests | `cd FE && npx playwright test` (full stack must be up) |
 | Load mock data | `cd BE && npm run db:seed` |
 | Start mock Sales system | `cd BE && npm run mock:sales` (`:4001`) |
 | Start mock Service system | `cd BE && npm run mock:service` (`:4002`) |
 | Reset the database | `cd BE && npm run db:reset` |
+
+The Docker stack already serves the mocks on `:4001` and `:4002`; run the two
+`mock:*` commands only when the Docker mocks are stopped.
 
 ## Ports
 
@@ -101,5 +106,7 @@ npm run dev                # starts Postgres, then Nest with hot reload
 | Frontend (Vite) | 5173 |
 | Backend (NestJS) | 3000 |
 | PostgreSQL | 5432 |
+| Mock Sales system | 4001 |
+| Mock Service system | 4002 |
 
 See `FE/README.md` and `BE/README.md` for details.

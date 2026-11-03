@@ -10,7 +10,7 @@ src/
 │   └── routes/             # one file per route/page (composition only)
 ├── features/               # feature modules — where most code lives
 │   └── documents/          # Scenario D: VIN search + aggregated documents
-│       ├── api/            # request functions + query/mutation hooks
+│       ├── api/            # request functions
 │       ├── components/     # components used only by this feature
 │       ├── hooks/          # hooks used only by this feature
 │       ├── types/          # types used only by this feature
@@ -52,7 +52,7 @@ file. Not before.
 ## Hard rules
 
 1. **No barrel files.** No `index.ts` that re-exports a folder. Import the file
-   directly: `import { DocumentList } from '@/features/documents/components/document-list'`.
+   directly: `import { DocumentList } from '@/features/documents/components/DocumentList'`.
    Barrel files break tree-shaking and slow down Vite
    ([Vercel: optimizing package imports](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js)).
    Exception: `lib/` may expose a single configured instance (`lib/http.ts`).

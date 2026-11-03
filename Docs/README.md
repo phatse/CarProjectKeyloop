@@ -6,11 +6,12 @@ Viewer).
 ## Reading order
 
 ```
-1. Docs/plan/phases.md        what to build next, in order
+1. Docs/system-design.md      the architectural plan
 2. Docs/rfc/0001-*.md         the feature spec
 3. Docs/contracts/*.md        exact request/response shapes
 4. Docs/plan/data-model.md    tables, columns, indexes, seed data
 5. Docs/adr/*.md              why a decision was made (do not re-litigate)
+6. Docs/plan/phases.md        build order and done criteria
 ```
 
 If the RFC and the code disagree, the RFC wins until it is updated deliberately.
@@ -35,7 +36,9 @@ If the RFC and the code disagree, the RFC wins until it is updated deliberately.
 
 | File | Purpose |
 | --- | --- |
+| `system-design.md` | Architecture, data flow, data model, failure semantics, observability, GenAI |
 | `plan/phases.md` | 10 phases with Definition of Done |
+| `plan/phase-8-frontend.md` | Phase 8 screen spec: files, naming, states |
 | `plan/data-model.md` | 3 schemas, columns, indexes, seed matrix |
 | `rfc/0001-documents-aggregation.md` | The only feature in Scenario D |
 | `contracts/documents-api.md` | HTTP contract, status codes, and why |
@@ -59,11 +62,12 @@ contract disagree, the contract is the bug report.
 | Area | State |
 | --- | --- |
 | Scenario chosen | D — Unified Document Viewer |
-| Infrastructure | Done (FE skeleton, BE skeleton, Postgres + API in Docker) |
+| Infrastructure | Done: FE, BE, Postgres, API and both mock systems in Docker |
 | Phase 1 — database | Done: `search_audit` + 2 mock schemas, 12 seed rows |
 | Phase 2 — mock APIs | Done: `:4001` sales, `:4002` service, `?fail` / `?delay` |
 | Phases 3–5 — domain | Done: VIN schema, adapters, aggregation + audit |
-| Phases 6–7 — API | Done: endpoint, Swagger, 6 e2e cases |
+| Phases 6–7 — API | Done: endpoint, Swagger, 8 e2e cases (6 documents + 2 health) |
 | Phase 8 — frontend | Done: VIN form, document list, source tags, degraded banner |
-| Phase 9 — Docker | Mocks in compose; seed still manual |
-| Next | Phase 9 remainder (auto-seed), then Phase 10 |
+| Phase 9 — Docker | Done: both mocks in compose; seed is a documented manual step |
+| System design | Done: `Docs/system-design.md` |
+| Next | Phase 10 remainder — README AI narrative, video script |

@@ -101,7 +101,7 @@ provider overrides, then stops them.
 - [x] States: idle, loading, empty, error, partial (banner)
 - [x] Source badge per row
 
-**DoD** — `npm run lint`, `tsc -b`, `npm test` (15) and `npm run build` pass.
+**DoD** — `npm run lint`, `tsc -b`, `npm test` (17) and `npm run build` pass.
 VIN validation mirrors the backend rule and blocks the request in the form.
 Browser verification of the live flow is part of Phase 9, which wires the
 mocks into Docker.
@@ -123,10 +123,11 @@ Seed is a documented manual step in the README quick start.
 
 ## Phase 10 — Documentation and demo
 
-- [ ] `Docs/system-design.md` (architecture, data flow, tech justification,
+- [x] `Docs/system-design.md` (architecture, data flow, tech justification,
       observability, GenAI section — the brief's Part 1 checklist)
 - [ ] README: build/run/test + **AI Collaboration Narrative**
 - [ ] Video script: intro, design, AI story, demo, lessons
 
-**DoD** — a reviewer can clone, run two commands, and see the feature without
-asking a question.
+**DoD** — a reviewer can clone the repo, run the quick-start commands
+(`docker compose up`, the seed step, then `cd FE && npm install && npm run dev`)
+and see the feature without asking a question.

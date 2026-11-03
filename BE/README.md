@@ -65,14 +65,16 @@ docker compose down            # stop everything (data is kept)
 cd BE
 cp .env.example .env
 npm install          # `postinstall` runs `prisma generate`
-npm run dev          # starts Postgres (waits until healthy), then Nest in watch mode
+npm run dev          # starts Postgres + both mocks, then Nest in watch mode
 ```
 
-> Do not run mode A and mode B at the same time — both bind port 3000.
-> Stop the container first: `docker compose down`.
+> Mode B starts Postgres and both mock systems but **not** the API container, so
+> `:3000` belongs to the local process. If mode A is still running, stop it
+> first (`docker compose down`) — its API container holds port 3000.
 
-`npm run dev` is just `npm run db:up && nest start --watch`. If you only need the
-database — for example to run `npm run test:e2e` — run `npm run db:up` on its own.
+`npm run dev` is just `npm run db:up:local && nest start --watch`. If you only
+need the database — for example to run `npm run test:e2e` — run
+`npm run db:up:local` on its own.
 
 ### Endpoints (both modes)
 
@@ -88,17 +90,18 @@ database — for example to run `npm run test:e2e` — run `npm run db:up` on it
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | **The only command you need**: start Postgres (waits until healthy), then the API in watch mode |
+| `npm run dev` | **The only command you need**: start Postgres and both mock systems (waits until healthy), then the API in watch mode |
 | `npm run build` | Compile to `dist/` |
 | `npm run start:prod` | Run the compiled build (`node dist/main.js`) |
 | `npm test` | Unit tests |
 | `npm run test:e2e` | E2E tests (needs PostgreSQL running) |
-| `npm run mock:sales` | Mock Sales system on `:4001` (reads `sales_system`) |
-| `npm run mock:service` | Mock Service system on `:4002` (reads `service_system`) |
+| `npm run mock:sales` | Mock Sales system on `:4001` as a host process (stop the Docker mock first) |
+| `npm run mock:service` | Mock Service system on `:4002` as a host process (stop the Docker mock first) |
 | `npm run lint` / `lint:fix` | Biome check / auto-fix |
-| `npm run db:up` | Start PostgreSQL and wait until healthy |
-| `npm run db:down` | Stop the container (data volume is kept) |
-| `npm run db:reset` | Drop the container **and the data volume**, then recreate |
+| `npm run db:up` | Start the whole Docker stack: Postgres, API and both mocks |
+| `npm run db:up:local` | Start only Postgres and both mocks (for local watch mode) |
+| `npm run db:down` | Stop the containers (data volume is kept) |
+| `npm run db:reset` | Drop the data volume, recreate the whole stack, then seed |
 | `npm run db:migrate` | Create + apply a migration |
 | `npm run db:seed` | Load mock upstream data (drops + recreates both mock schemas) |
 | `npm run db:generate` | Regenerate the Prisma client |

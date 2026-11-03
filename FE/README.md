@@ -85,7 +85,11 @@ Two rules that matter most:
 
 ## Testing notes
 
-- Vitest runs in a `jsdom` environment with globals enabled.
+- Unit and component tests: `npm test` (Vitest, `jsdom`, globals enabled).
+  17 tests in 5 files, under `src/test/features/`, mirroring `src/features/`.
 - `@testing-library/jest-dom` matchers are registered in `src/test/setup.ts`.
-- `npm run test` currently passes with `--passWithNoTests`; remove that flag
-  once the first real test lands.
+- Browser tests: `npx playwright test`, three specs in `src/test/e2e/`. They
+  need the API, both mock systems and the seeded database running, plus
+  `npx playwright install chromium` once per machine. Playwright starts the Vite
+  dev server itself (`webServer` in `playwright.config.ts`).
+- Coverage: `npm run test:coverage`.
