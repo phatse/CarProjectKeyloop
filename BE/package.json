@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "dev": "npm run db:up && nest start --watch",
+    "dev": "npm run db:up:local && nest start --watch",
     "build": "nest build",
     "start:prod": "node dist/main.js",
     "lint": "biome check .",
@@ -17,6 +17,7 @@
     "mock:sales": "MOCK_SYSTEM=sales node --env-file-if-exists=.env mocks/server.ts",
     "mock:service": "MOCK_SYSTEM=service node --env-file-if-exists=.env mocks/server.ts",
     "db:up": "docker compose -f ../docker-compose.yml up -d --wait",
+    "db:up:local": "docker compose -f ../docker-compose.yml up -d --wait postgres mock-sales mock-service",
     "db:down": "docker compose -f ../docker-compose.yml down",
     "db:reset": "docker compose -f ../docker-compose.yml down -v && docker compose -f ../docker-compose.yml up -d --wait && npm run db:seed",
     "db:migrate": "prisma migrate dev",

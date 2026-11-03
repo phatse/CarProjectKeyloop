@@ -66,6 +66,8 @@ services:
       MOCK_SYSTEM: sales
       PORT: 4001
       DATABASE_URL: postgresql://carproject:carproject@postgres:5432/carproject
+    ports:
+      - '4001:4001'
     depends_on:
       postgres:
         condition: service_healthy
@@ -91,6 +93,8 @@ services:
       MOCK_SYSTEM: service
       PORT: 4002
       DATABASE_URL: postgresql://carproject:carproject@postgres:5432/carproject
+    ports:
+      - '4002:4002'
     depends_on:
       postgres:
         condition: service_healthy
