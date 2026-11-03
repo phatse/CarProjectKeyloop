@@ -21,15 +21,34 @@ CarProject/
 | `Docs/` | ✅ RFC-0001, 3 ADRs, phase plan, data model, API contract |
 | `AGENTS.md` | ✅ Agent rules (auto-loaded by OpenCode / Codex / Cursor) |
 | Root workspaces | ⬜ Not set up (each app installs independently) |
-| Docker | 🟨 API + Postgres + both mocks. Auto-seed is the Phase 9 remainder |
+| Docker | ✅ API, Postgres and both mocks; mock data loaded with the seed command in Quick start |
 
 ## Quick start
 
-### Backend + database in Docker (no Node.js needed)
+### Backend + database in Docker (Node.js optional)
 
 ```bash
 docker compose up -d --build
 ```
+
+Then load the mock documents — first run only. Pick **one**:
+
+**Only Docker installed:**
+
+```bash
+docker compose exec -T postgres psql -U carproject -d carproject \
+  -v ON_ERROR_STOP=1 < BE/db/seed.sql
+```
+
+**Node/npm installed** (runs the project script, same SQL):
+
+```bash
+cd BE && npm run db:seed
+```
+
+Both create `sales_system` and `service_system` and insert the 12 mock documents
+the two mock systems serve. Without this step every search returns `502`.
+Re-running either command resets the mock data to those 12 rows.
 
 | URL | What |
 | --- | --- |

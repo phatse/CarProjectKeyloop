@@ -25,7 +25,7 @@ NestJS 12 API on Node.js 24, PostgreSQL 18 via Prisma 7.
 
 ## Quick start
 
-### A. Everything in Docker (no Node.js needed)
+### A. Everything in Docker (Node.js optional)
 
 From the **repository root**:
 
@@ -33,8 +33,26 @@ From the **repository root**:
 docker compose up -d --build
 ```
 
-That starts PostgreSQL **and** the API. The API container applies pending Prisma
-migrations on start, then runs the compiled build.
+Then load the mock documents — first run only. Pick **one**:
+
+**Only Docker installed:**
+
+```bash
+docker compose exec -T postgres psql -U carproject -d carproject \
+  -v ON_ERROR_STOP=1 < BE/db/seed.sql
+```
+
+**Node/npm installed** (runs the project script, same SQL):
+
+```bash
+cd BE && npm run db:seed
+```
+
+Both create `sales_system` and `service_system` and insert the 12 mock documents;
+without them every search returns `502`. Re-running either resets the mock data.
+
+That starts PostgreSQL, the API **and** both mock systems. The API container
+applies pending Prisma migrations on start, then runs the compiled build.
 
 ```bash
 docker compose logs -f api     # follow API logs

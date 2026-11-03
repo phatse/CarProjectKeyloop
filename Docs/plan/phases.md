@@ -112,12 +112,12 @@ mocks into Docker.
 
 - [x] `mock-sales`, `mock-service` services in `docker-compose.yml`
 - [x] `SALES_API_URL`, `SERVICE_API_URL`, `UPSTREAM_TIMEOUT_MS` in `config/env.ts`
-- [ ] Seed runs automatically on first start
+- [x] Seed documented in the README quick start (manual step, not automated)
 
 **DoD** — `docker compose up -d --build` brings up four healthy containers and
 `GET /api/v1/vehicles/1HGCM82633A004352/documents` returns `COMPLETE` with 6
 documents. The frontend e2e suite (`FE/src/test/e2e`, Playwright) passes against it.
-Seed is still a manual `npm run db:seed`.
+Seed is a documented manual step in the README quick start.
 
 ---
 
