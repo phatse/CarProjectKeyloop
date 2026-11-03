@@ -1,10 +1,6 @@
 import { Tag } from 'antd'
 import type { DocumentSource } from '@/features/documents/types/document'
-
-const sourceLabel: Record<DocumentSource, string> = {
-  SALES: 'Sales',
-  SERVICE: 'Service',
-}
+import { sourceLabel } from '@/features/documents/utils/source-label'
 
 type SourceTagProps = {
   source: DocumentSource

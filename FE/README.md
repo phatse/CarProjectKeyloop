@@ -28,6 +28,7 @@ React + TypeScript SPA for the Keyloop technical assessment.
 
 ```bash
 npm install
+cp .env.example .env
 npm run dev
 ```
 
@@ -35,11 +36,11 @@ The app runs on <http://localhost:5173>.
 
 ### Backend proxy
 
-Requests to `/api/*` are proxied by Vite to `http://localhost:3000`. Point it
-somewhere else for one run with `VITE_PROXY_TARGET=http://host:port npm run dev`.
-The frontend always calls relative paths (`/api/v1/...`), so no backend origin is
-hardcoded, no CORS setup is needed in development, and production can sit behind
-the same reverse proxy.
+Requests to `/api/*` are proxied by Vite to `VITE_PROXY_TARGET` from `.env`.
+Copy `.env.example` to `.env` and change the value when the backend runs
+elsewhere; there is no fallback in `vite.config.ts`. The frontend always calls
+relative paths (`/api/v1/...`), so no backend origin is hardcoded, no CORS setup
+is needed in development, and production can sit behind the same reverse proxy.
 
 ## Scripts
 

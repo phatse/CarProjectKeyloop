@@ -1,4 +1,5 @@
 import { Button, Form, Input } from 'antd'
+import { MONO_FONT } from '@/features/documents/utils/typography'
 import { isValidVin, normalizeVin } from '@/features/documents/utils/vin'
 
 type VinSearchFormProps = {
@@ -41,9 +42,9 @@ export function VinSearchForm({ onSearch }: VinSearchFormProps) {
             ]}
           >
             <Input
-              placeholder="1HGCM82633A004352"
+              placeholder="17 characters"
               allowClear
-              style={{ fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.04em' }}
+              style={{ fontFamily: MONO_FONT, letterSpacing: '0.04em' }}
             />
           </Form.Item>
           <Button type="primary" htmlType="submit">

@@ -1,5 +1,6 @@
 import { Table, Typography } from 'antd'
 import type { Document } from '@/features/documents/types/document'
+import { MONO_FONT } from '@/features/documents/utils/typography'
 import { SourceTag } from './SourceTag'
 
 type DocumentListProps = {
@@ -48,9 +49,7 @@ export function DocumentList({ documents }: DocumentListProps) {
           title: 'Issued',
           dataIndex: 'issuedAt',
           width: 130,
-          render: (issuedAt: string) => (
-            <span style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{issuedAt}</span>
-          ),
+          render: (issuedAt: string) => <span style={{ fontFamily: MONO_FONT }}>{issuedAt}</span>,
         },
         {
           title: 'Amount',
@@ -58,9 +57,7 @@ export function DocumentList({ documents }: DocumentListProps) {
           width: 160,
           align: 'right',
           render: (_, document) => (
-            <span style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
-              {formatAmount(document)}
-            </span>
+            <span style={{ fontFamily: MONO_FONT }}>{formatAmount(document)}</span>
           ),
         },
         {

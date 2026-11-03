@@ -1,10 +1,6 @@
 import { Alert } from 'antd'
 import type { DocumentSource, SourceStatus } from '@/features/documents/types/document'
-
-const sourceLabel: Record<DocumentSource, string> = {
-  SALES: 'Sales',
-  SERVICE: 'Service',
-}
+import { sourceLabel } from '@/features/documents/utils/source-label'
 
 const statusText: Record<Exclude<SourceStatus, 'OK'>, string> = {
   TIMEOUT: 'timed out',

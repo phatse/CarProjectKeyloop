@@ -63,11 +63,12 @@ compiled build.
 ```bash
 cd FE
 npm install
+cp .env.example .env
 npm run dev                # http://localhost:5173
 ```
 
-The frontend proxies `/api/*` to `http://localhost:3000`, so no CORS setup is needed
-in development.
+The frontend proxies `/api/*` to `VITE_PROXY_TARGET` from `.env` (the example
+points at `http://localhost:3000`), so no CORS setup is needed in development.
 
 ### Alternative: backend in watch mode (development)
 
