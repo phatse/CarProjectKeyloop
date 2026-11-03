@@ -30,7 +30,7 @@ instructions require a persistent database. What exactly should we persist?
 Chosen option: **1 — audit only**.
 
 A `search_audit` row per search records the VIN, correlation id, per-source
-status and latency, document count, and whether the response was degraded. It
+status and latency, and document count. It
 satisfies the persistence requirement, makes production questions answerable
 ("why did this VIN fail yesterday?"), and avoids claiming ownership of data that
 is not ours.

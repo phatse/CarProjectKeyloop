@@ -63,7 +63,6 @@ compiled build.
 ```bash
 cd FE
 npm install
-cp .env.example .env.local
 npm run dev                # http://localhost:5173
 ```
 
@@ -88,9 +87,9 @@ npm run dev                # starts Postgres + both mocks, then Nest with hot re
 | Stop everything | `docker compose down` |
 | Start API + DB + mocks in watch mode | `cd BE && npm run dev` |
 | Start UI | `cd FE && npm run dev` |
-| Run backend tests | `cd BE && npm test && npm run test:e2e` (Postgres must be up) |
+| Run backend tests | `cd BE && npm test && npm run test:e2e` (Postgres up and seeded) |
 | Run frontend unit tests | `cd FE && npm test` |
-| Run browser tests | `cd FE && npx playwright test` (full stack must be up) |
+| Run browser tests | `cd FE && npx playwright test` (API, mocks and seeded database up) |
 | Load mock data | `cd BE && npm run db:seed` |
 | Start mock Sales system | `cd BE && npm run mock:sales` (`:4001`) |
 | Start mock Service system | `cd BE && npm run mock:service` (`:4002`) |

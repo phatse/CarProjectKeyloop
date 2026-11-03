@@ -110,7 +110,9 @@ ascending, so the response is deterministic and testable.
 
 | Header | Value |
 | --- | --- |
-| `x-correlation-id` | echoed from the request (max 128 characters), or generated when absent |
+| `x-correlation-id` | echoed from the request, or generated when absent |
+
+The audit column stores up to 128 characters.
 
 ## Why these choices
 

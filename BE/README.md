@@ -94,7 +94,7 @@ need the database — for example to run `npm run test:e2e` — run
 | `npm run build` | Compile to `dist/` |
 | `npm run start:prod` | Run the compiled build (`node dist/main.js`) |
 | `npm test` | Unit tests |
-| `npm run test:e2e` | E2E tests (needs PostgreSQL running) |
+| `npm run test:e2e` | E2E tests (PostgreSQL running and seeded) |
 | `npm run mock:sales` | Mock Sales system on `:4001` as a host process (stop the Docker mock first) |
 | `npm run mock:service` | Mock Service system on `:4002` as a host process (stop the Docker mock first) |
 | `npm run lint` / `lint:fix` | Biome check / auto-fix |
@@ -184,7 +184,7 @@ test/
 | Level | Command | Location | Talks to |
 | --- | --- | --- | --- |
 | Unit | `npm test` | `test/unit/**/*.spec.ts` | mocks only |
-| E2E | `npm run test:e2e` | `test/e2e/**/*.e2e-spec.ts` | real Postgres, real HTTP |
+| E2E | `npm run test:e2e` | `test/e2e/**/*.e2e-spec.ts` | real Postgres (seeded), real HTTP |
 
 The two globs never overlap, so `npm test` cannot accidentally boot the app.
 
@@ -210,7 +210,7 @@ const moduleRef = await Test.createTestingModule({
 Pure functions with no injected dependencies (Zod schemas, `validateEnv`) are
 called directly; a testing module would only add noise.
 
-The e2e suite starts both mock systems itself on `:4101`/`:4102` and stops them
+The e2e suite starts both mock systems itself on OS-assigned ports and stops them
 afterwards. It still needs PostgreSQL with seed data:
 
 ```bash

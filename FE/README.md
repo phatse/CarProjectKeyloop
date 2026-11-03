@@ -10,11 +10,12 @@ React + TypeScript SPA for the Keyloop technical assessment.
 | Build tool | Vite | 8.x |
 | UI | React | 19.x |
 | Language | TypeScript | 7.x |
-| Routing | React Router (data router) | 7.x |
+| Routing | Single screen, no router | — |
 | Server state | TanStack Query | 5.x |
 | Component library | Ant Design | 6.x |
 | HTTP client | Axios | 1.x |
-| Forms | React Hook Form + Zod | 7.x / 4.x |
+| Forms | Ant Design Form | 6.x |
+| VIN validation | `isValidVin` mirrors the API rule | — |
 | Unit / component tests | Vitest + Testing Library | 5.x / 16.x |
 | Lint + format | Biome | 2.x |
 
@@ -27,7 +28,6 @@ React + TypeScript SPA for the Keyloop technical assessment.
 
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
@@ -35,11 +35,11 @@ The app runs on <http://localhost:5173>.
 
 ### Backend proxy
 
-Requests to `/api/*` are proxied by Vite to `VITE_PROXY_TARGET`
-(default `http://localhost:3000`). The frontend therefore always calls
-relative paths (`/api/v1/...`) and never hardcodes a backend origin — no CORS
-configuration is needed in development, and production can sit behind the same
-reverse proxy.
+Requests to `/api/*` are proxied by Vite to `http://localhost:3000`. Point it
+somewhere else for one run with `VITE_PROXY_TARGET=http://host:port npm run dev`.
+The frontend always calls relative paths (`/api/v1/...`), so no backend origin is
+hardcoded, no CORS setup is needed in development, and production can sit behind
+the same reverse proxy.
 
 ## Scripts
 
@@ -64,7 +64,7 @@ import { httpClient } from '@/lib/http'
 
 ```
 src/
-├── app/          # shell: router, providers, routes
+├── app/          # shell: providers, routes
 ├── features/     # feature modules — most code lives here
 ├── lib/          # preconfigured third-party (http client, query client)
 └── test/         # test setup, feature tests, e2e/ (Playwright)

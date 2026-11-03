@@ -30,11 +30,13 @@ a design that reads as deliberate rather than accidental.
 
 Chosen option: **NestJS + Prisma + PostgreSQL + React**.
 
-NestJS provides `Interceptor` (correlation id), `Pipe` (validation),
-`@nestjs/terminus` (health), and `@nestjs/swagger` (OpenAPI) as first-class
-primitives, so the observability criterion is satisfied by framework features
-rather than bespoke code. TypeScript on both sides lets one Zod schema serve as
-request validation, frontend form validation, and the OpenAPI source.
+NestJS provides `Pipe` (validation), `@nestjs/terminus` (health) and
+`@nestjs/swagger` (OpenAPI) as first-class primitives. Request logging and the
+correlation id come from `pino-http` (`genReqId`), so the observability criterion
+is met by configuring a library rather than writing bespoke code. Zod validates
+the request on the backend. The frontend mirrors the VIN rule with a regex
+because the two packages do not share a module. The OpenAPI document is built
+from controller decorators.
 
 ### Consequences
 

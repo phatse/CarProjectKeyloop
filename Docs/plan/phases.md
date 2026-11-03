@@ -16,7 +16,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 **DoD** — `npm run db:migrate` succeeds; `psql -c '\dn'` lists three schemas;
 `select count(*) from sales_system.document` returns 7 and `service_system` 5.
-Migration `20261102134606_init`; seed applied with `npm run db:seed`.
+Migration `20261102134606_init` and `20261102153938_correlation_id_text`; seed
+applied with `npm run db:seed`.
 
 ---
 
@@ -98,7 +99,7 @@ provider overrides, then stops them.
 
 - [x] `features/documents/` — api, hooks, components
 - [x] Route `app/routes/DocumentViewer.tsx`
-- [x] States: idle, loading, empty, error, partial (banner)
+- [x] States: idle, loading, empty, error, partial (banner), complete
 - [x] Source badge per row
 
 **DoD** — `npm run lint`, `tsc -b`, `npm test` (17) and `npm run build` pass.

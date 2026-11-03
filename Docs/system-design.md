@@ -78,7 +78,7 @@ never joins their schemas.*
 | Component | Responsibility | Why it is separate |
 | --- | --- | --- |
 | React SPA | VIN form, validation, loading/empty/partial states, one row per document with a source tag | Rendering only; no business rule beyond input shape |
-| `DocumentsController` | Validates `:vin`, delegates, maps domain outcomes to `200`/`400`/`502` | HTTP concerns stay out of the service |
+| `DocumentsController` | Validates `:vin`, delegates; errors surface as `400` from the pipe and `502` from the service | HTTP concerns stay out of the service |
 | `DocumentsService` | Fan-out, normalise, dedupe, sort, derive `COMPLETE`/`PARTIAL`, record audit | The only place that knows both sources exist |
 | `SalesAdapter` | Calls Sales, maps its payload shape, classifies failures | Payload shape is owned by Sales; the domain is not |
 | `ServiceAdapter` | Same for Service, with a different payload shape | Proves normalisation is real, not assumed |
@@ -86,8 +86,8 @@ never joins their schemas.*
 | PostgreSQL | `sales_system`, `service_system` (fixtures) and `public.search_audit` (ours) | One database, three owners, three schemas |
 
 The API also exposes `GET /api/health` (readiness: database round-trip) and
-`GET /api/health/live` (liveness: process only). Both are wired into the Docker
-health checks.
+`GET /api/health/live` (liveness: process only). The liveness endpoint is the
+Docker health check; readiness is for an operator or a load balancer.
 
 ## 3. Data flow
 
@@ -145,7 +145,7 @@ cannot delay the other beyond the deadline.*
 | 2 | Client-side validation blocks an invalid VIN before any request | `features/documents/utils/vin.ts` |
 | 3 | Request reaches the controller; the pipe normalises (trim, upper-case) and validates again | `zod-validation.pipe.ts` |
 | 4 | Service starts both adapter calls with `Promise.allSettled` | `documents.service.ts` |
-| 5 | Each adapter applies a per-call `AbortSignal.timeout` and parses the payload with Zod | `adapters/*.adapter.ts` |
+| 5 | The shared upstream client applies a per-call `AbortSignal.timeout`; each adapter parses its payload with Zod | `adapters/upstream-client.ts`, `adapters/*.adapter.ts` |
 | 6 | Results are merged: prefix `id` with the source, drop duplicates inside a source, sort by `issuedAt` descending | `documents.service.ts` |
 | 7 | Status is derived from how many sources returned `OK` | `documents.service.ts` |
 | 8 | Audit row is written best-effort | `search-audit.repository.ts` |
@@ -255,7 +255,7 @@ REST API.
 
 | Signal | How | What it answers |
 | --- | --- | --- |
-| Structured logs | `pino` JSON, one line per request | What happened, to which route, with what status and duration |
+| Structured logs | `pino`, one line per request (JSON in production) | What happened, to which route, with what status and duration |
 | Correlation id | `x-correlation-id` reused if sent, generated with `randomUUID()` otherwise, echoed in the response | Which log lines and which `search_audit` row belong to one search |
 | Request timing | `responseTime` on every log line; per-source latency in the audit row | Is the API slow, or is one upstream slow |
 | Search audit | `public.search_audit` row per search, written best-effort | Volume, VINs searched, per-source health over time |
@@ -317,7 +317,7 @@ change when the code disagreed with them.
 1. The two dealership systems are independent owners; the API may call them over
    HTTP but never read their schemas directly.
 2. A VIN is 17 characters, excludes `I`, `O`, `Q`, and is case-insensitive.
-3. Each upstream answers within 1.5 s at p95; slower is treated as unavailable.
+3. Each upstream answers within 1.5 s at p99; slower is treated as unavailable.
 4. Source ids are stable and unique inside their own system.
 5. The same document may exist in both systems under different ids, and is kept
    twice rather than guessed to be equal.

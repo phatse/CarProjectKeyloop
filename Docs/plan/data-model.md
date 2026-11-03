@@ -1,7 +1,7 @@
 # Data model
 
 Three schemas in one PostgreSQL instance. The schema boundary is deliberate: it
-simulates three systems that do not share a database (ADR-0003).
+simulates three systems that keep their data apart (ADR-0003).
 
 ```
 carproject (database)
@@ -39,7 +39,7 @@ Indexes:
   this vehicle?"
 - `idx_search_audit_correlation (correlation_id)` — join to logs
 
-Retention: not implemented (out of scope); noted in the design document.
+Retention: not implemented (out of scope).
 
 ## `sales_system.document`
 

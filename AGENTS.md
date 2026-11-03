@@ -58,7 +58,7 @@ BE/src/
 ├── health/ prisma/ config/ common/
 BE/mocks/                two mock upstream systems (sales, service)
 BE/prisma/               schema + migrations
-Docs/                    RFCs, ADRs, plan, API contracts
+Docs/                    System design, RFCs, ADRs, plan, API contracts
 ```
 
 ## Architecture rules

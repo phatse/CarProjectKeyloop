@@ -46,4 +46,4 @@ adding a new class of problem; B is mostly UI state.
 ### Confirmation
 
 Traceability is recorded in the RFC acceptance criteria: each brief bullet maps
-to a test in `BE/test/` or `BE/src/documents/**/*.spec.ts`.
+to a test in `BE/test/` (unit or e2e).

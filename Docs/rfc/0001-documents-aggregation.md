@@ -28,7 +28,7 @@ mocked APIs, consolidated view labelled by source.
 - Merge, de-duplicate, sort.
 - Partial-failure representation.
 - Audit persistence per search.
-- One frontend screen with four states.
+- One frontend screen: idle, loading, empty, error, partial and complete.
 
 **Out of scope**
 
@@ -59,7 +59,7 @@ Service             orchestrates: parallel fetch → merge → dedupe → sort �
    │
 Adapters            one per source; own HTTP shape, own parser, own timeout
    │
-Mock systems        Express/Fastify apps reading their own Postgres schema
+Mock systems        node:http servers reading their own Postgres schema
 ```
 
 Responsibilities:
@@ -151,6 +151,7 @@ cd BE
 npm run lint && npx tsc --noEmit
 npm test
 docker compose up -d
+npm run db:seed
 npm run test:e2e
 curl -s localhost:3000/api/v1/vehicles/1HGCM82633A004352/documents | jq
 ```
