@@ -78,6 +78,84 @@ npm install
 npm run dev                # starts Postgres + both mocks, then Nest with hot reload
 ```
 
+## AI Collaboration Narrative
+
+I used an AI coding agent (OpenCode) as a drafting partner, not as the author of
+record. The rule was simple: the agent proposes, I decide, and nothing is done
+until a command proves it. Repository rules live in `AGENTS.md`, so every session
+starts from the same constraints instead of a fresh prompt.
+
+### How I directed the work
+
+- **Constraints first.** Before the first prompt I fixed the scenario, the stack
+  and the boundaries: one endpoint, two mocked systems, audit-only persistence,
+  no extra infrastructure.
+- **Design before code.** The agent drafted
+  [RFC-0001](Docs/rfc/0001-documents-aggregation.md), three ADRs, the
+  [API contract](Docs/contracts/documents-api.md) and a
+  [10-phase plan](Docs/plan/phases.md) with a Definition of Done per phase. I
+  reviewed those documents before implementation started.
+- **Small tasks, explicit scope.** Each phase was implemented and verified on its
+  own. Work outside the phase was rejected or sent back as a separate task.
+- The design-phase detail is in
+  [system-design.md §8](Docs/system-design.md#8-how-genai-was-used-in-the-design-phase).
+
+### How I verified the output
+
+Nothing was accepted because it looked right. Each phase ended with a command:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Backend unit | `cd BE && npm test` | 32 tests |
+| Backend e2e | `cd BE && npm run test:e2e` | 8 tests, real Postgres and HTTP |
+| Frontend unit | `cd FE && npm test` | 17 tests |
+| Browser flow | `cd FE && npx playwright test` | 3 tests against the running stack |
+| Full stack | `docker compose up -d --build` | 4 healthy containers, `COMPLETE` with 6 documents |
+
+Review was not only "do the tests pass". After implementation I compared the
+written claims with the code and corrected 12 documentation files in one pass:
+wrong claims about the correlation id and the mock stack, a health check
+attributed to the wrong endpoint, stale test counts, and a reference to a
+retention note that did not exist.
+
+### What the process caught
+
+- **Duplicate validation message.** The required rule and the format validator
+  both fired on an empty VIN. Found while exercising the form, fixed so one rule
+  owns the empty case, and covered by two component tests.
+- **A dev command that could not run.** `npm run dev` started the API container
+  and then failed to bind port 3000. Reproduced with a real bind attempt, then
+  the script was split so local watch mode leaves that port to the local process.
+- **A local mode that returned `502`.** The API on the host called
+  `localhost:4001`, but the Docker mocks were not published to the host. Two port
+  mappings later, the same request returned `COMPLETE` with six documents.
+- **A fresh install that returned `502`.** `docker compose up` starts the stack
+  but does not load the mock schemas. The seed step is now part of the quick
+  start, with a Docker-only command and an npm shortcut.
+
+### What I did not accept
+
+The agent's default answer to "system design" is to add components. I kept the
+system small on purpose:
+
+- No Redis cache: documents belong to the upstream systems, and a cache would
+  create a staleness contract the brief never asks for (ADR-0003).
+- No circuit breaker or retry: a per-call deadline is enough for two sources.
+  Both are listed as future work, each with the trigger that would justify it.
+- No second database: the one table this service owns lives in the same
+  PostgreSQL instance, in its own schema.
+
+Every box in the architecture diagram exists and runs. The alternatives are
+recorded, with the reason they were rejected, in
+[ADR-0003](Docs/adr/0003-audit-only-persistence.md) and
+[system-design.md §10](Docs/system-design.md#10-future-work).
+
+### Bottom line
+
+AI made the drafts faster and the checks cheaper. What made the result
+trustworthy was the process around it: written decisions, a Definition of Done
+per phase, and a refusal to call anything done until a command showed it.
+
 ## Commands (the only ones you need)
 
 | What | Command |

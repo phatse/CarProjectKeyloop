@@ -70,4 +70,4 @@ contract disagree, the contract is the bug report.
 | Phase 8 — frontend | Done: VIN form, document list, source tags, degraded banner |
 | Phase 9 — Docker | Done: both mocks in compose; seed is a documented manual step |
 | System design | Done: `Docs/system-design.md` |
-| Next | Phase 10 remainder — README AI narrative, video script |
+| Next | Phase 10 remainder — video script |
