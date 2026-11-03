@@ -127,7 +127,7 @@ Seed is a documented manual step in the README quick start.
 - [x] `Docs/system-design.md` (architecture, data flow, tech justification,
       observability, GenAI section — the brief's Part 1 checklist)
 - [x] README: build/run/test + **AI Collaboration Narrative**
-- [ ] Video script: intro, design, AI story, demo, lessons
+- [x] Video script: intro, design, AI story, demo, lessons (kept outside the repository)
 
 **DoD** — a reviewer can clone the repo, run the quick-start commands
 (`docker compose up`, the seed step, then `cd FE && npm install && npm run dev`)
